@@ -59,6 +59,35 @@ const restaurant = {
   },
 };
 
+//1. Receive information from the text area
+//2. Convert to array
+//3. convert text from underscore to camel case
+// 3.1 Split at the underscore. destructure string?
+// 3.2 Uppercase at the n2[0]
+//4. return camel case on new line
+//5. Add emoji
+
+document.body.append(document.createElement('textarea'));
+document.body.append(document.createElement('button'));
+
+document.querySelector('button').addEventListener('click', function () {
+  const input = document.querySelector('textarea').value;
+  let check = [];
+  const underScoreArr = input.toLowerCase().replaceAll(' ', '').split('\n');
+  const camelCaseArr = [];
+  for (const v of underScoreArr) {
+    const [a, b] = v.split('_');
+    check.push('✅');
+    console.log(
+      (a + b[0].toUpperCase() + b.slice(1)).padEnd(20, ' ') +
+        check.toString().replaceAll(',', ' ')
+    );
+  }
+});
+
+// document.querySelector('textarea');
+
+/*
 //--------------------SPLIT AND JOIN----------------------//
 console.log('a+very+nice+string'.split('+'));
 console.log('Dan Thomas Hill'.split(' '));
@@ -109,7 +138,7 @@ planesInLine(6);
 // const nameL = name.toLowerCase();
 // const nameC = nameL[0].toUpperCase() + nameL.slice(1);
 
-/*
+
 
 const airline = 'TAP air Portugal';
 // const plane = 'A320';
