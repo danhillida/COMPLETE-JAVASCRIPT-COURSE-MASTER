@@ -9,3 +9,7 @@ double(arr);
 
 const shout = () => console.log("HELLO THERE!");
 shout;
+
+document.getElementById("changeme").textContent = "Welcome to my practice page";
+
+document.getElementById("changeme").style.color = "green";
