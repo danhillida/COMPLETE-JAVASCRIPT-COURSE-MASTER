@@ -106,7 +106,7 @@ greet('Hello')('Jonas');
 const greet2 = greeting => name => console.log(`${greeting} ${name}`);
 
 greet2('Sup')('Dan');
-*/
+
 
 const lufthansa = {
   airline: 'Lufthansa',
@@ -154,3 +154,70 @@ book.apply(swiss, flightData);
 console.log(swiss);
 
 book.call(swiss, ...flightData);
+
+//Bind method
+const bookEW = book.bind(eurowings);
+const bookLH = book.bind(lufthansa);
+const bookLX = book.bind(swiss);
+
+bookEW(23, 'Steven Williams');
+
+const bookEW23 = book.bind(eurowings, 23);
+bookEW23('Dan Hill');
+bookEW23('Martha Cooper');
+
+// With Even Listners
+lufthansa.planes = 300;
+lufthansa.buyPlane = function () {
+  console.log(this);
+  this.planes++;
+  console.log(this.planes);
+};
+// lufthansa.buyPlane();
+
+document
+  .querySelector('.buy')
+  .addEventListener('click', lufthansa.buyPlane.bind(lufthansa));
+
+// Partial application
+
+const addTax = (rate, value) => value + value * rate;
+console.log(addTax(0.1, 200));
+
+const addVAT = addTax.bind(null, 0.37);
+
+console.log(addVAT(100));
+console.log(addVAT(77));
+
+const addTaxRate = function (rate) {
+  return function (value) {
+    return value + value * rate;
+  };
+};
+const addVat2 = addTaxRate(0.23);
+console.log(addVat2(100));
+*/
+
+// 1: Create prompt that desplays the question
+
+const poll = {
+  question: 'What is your favourite programming language?',
+  options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
+  registerNewAnswer: function () {
+    let answer = prompt(
+      parseInt(`${poll.question}
+    ${poll.options[0]}
+    ${poll.options[1]}
+    ${poll.options[2]}
+    ${poll.options[3]}
+    (Write Option Number)`)
+    );
+    console.log(answer);
+  },
+  //  This generates [0, 0, 0, 0].  More in the next section
+  answers: new Array(4).fill(0),
+};
+
+document
+  .querySelector('.poll')
+  .addEventListener('click', poll.registerNewAnswer);
