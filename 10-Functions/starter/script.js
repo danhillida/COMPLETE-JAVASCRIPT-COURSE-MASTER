@@ -196,28 +196,79 @@ const addTaxRate = function (rate) {
 };
 const addVat2 = addTaxRate(0.23);
 console.log(addVat2(100));
-*/
+
 
 // 1: Create prompt that desplays the question
 
 const poll = {
   question: 'What is your favourite programming language?',
   options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
+
+  //  This generates [0, 0, 0, 0].  More in the next section
+  answers: new Array(4).fill(0),
+
+  displayResults: function (string) {
+    if (string === 'array') {
+      console.log(poll.answers);
+    } else if (string === 'string') {
+      console.log(
+        `Poll results are ${poll.answers[0]}, ${poll.answers[1]}, ${poll.answers[2]}, ${poll.answers[3]}`
+      );
+    }
+  },
+
   registerNewAnswer: function () {
     let answer = prompt(
-      parseInt(`${poll.question}
-    ${poll.options[0]}
+      `${poll.question}
+    ${poll.options[0]} 
     ${poll.options[1]}
     ${poll.options[2]}
     ${poll.options[3]}
-    (Write Option Number)`)
+    (Write Option Number)`
     );
-    console.log(answer);
+    let number = parseInt(answer);
+    poll.answers[number]++;
+    poll.displayResults('string');
   },
-  //  This generates [0, 0, 0, 0].  More in the next section
-  answers: new Array(4).fill(0),
 };
 
 document
   .querySelector('.poll')
   .addEventListener('click', poll.registerNewAnswer);
+
+console.log(poll.answers);
+*/
+const poll = {
+  question: 'What is your favourite programming language?',
+  options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
+
+  //  This generates [0, 0, 0, 0].  More in the next section
+  answers: new Array(4).fill(0),
+  registerNewAnswer() {
+    const answer = Number(
+      prompt(
+        `${this.question}\n${this.options.join('\n')}\n(Write option number)`
+      )
+    );
+    this.displayResults();
+    this.displayResults('string');
+
+    //register
+    typeof answer === 'number' &&
+      answer < this.answers.length &&
+      this.answers[answer]++;
+
+    console.log(this.answers);
+  },
+  displayResults(type = 'array') {
+    if (type === 'array') {
+      console.log(this.answers);
+    } else if (type === 'string') {
+      console.log(`Poll results are ${this.answers.join(', ')}`);
+    }
+  },
+};
+
+document
+  .querySelector('.poll')
+  .addEventListener('click', poll.registerNewAnswer.bind(poll));
