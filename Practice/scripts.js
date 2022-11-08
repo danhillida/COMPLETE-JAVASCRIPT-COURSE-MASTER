@@ -13,3 +13,17 @@ shout;
 document.getElementById("changeme").textContent = "Welcome to my practice page";
 
 document.getElementById("changeme").style.color = "green";
+
+const newObj = {
+  firstName: "Dan",
+  lastName: "Hill",
+  middleName: "Thomas",
+
+  fullName: function () {
+    console.log(`${this.firstName} ${this.middleName} ${this.lastName}`);
+  },
+};
+
+document
+  .getElementById("btn")
+  .addEventListener("click", newObj.fullName.bind(newObj));
