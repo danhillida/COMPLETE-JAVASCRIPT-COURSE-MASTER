@@ -81,6 +81,44 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
+const calcDisplaySummary = function (movements) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov);
+  labelSumIn.textContent = `${incomes} €`;
+
+  const out = movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov);
+  labelSumOut.textContent = `${Math.abs(out)} €`;
+
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .filter((int, i, arr) => {
+      console.log(arr);
+      return int >= 1;
+    })
+    .reduce((acc, int) => acc + int);
+  labelSumInterest.textContent = `${interest} €`;
+};
+calcDisplaySummary(account1.movements);
+
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance} EUR`;
+};
+calcDisplayBalance(account1.movements);
+
+const createUsernames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLocaleLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+const user = 'Steven Thomas Williams'; //stw
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -91,7 +129,7 @@ displayMovements(account1.movements);
 //   ['GBP', 'Pound sterling'],
 // ]);
 
-// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
 /*
@@ -207,7 +245,7 @@ const checkDogs = function (arr1, arr2) {
 };
 
 checkDogs(juliasDogsNew, katesDogs);
-*/
+
 
 // Data Transoformations
 // MAP will create a new Array with an operator (like map currentArr * 2)
@@ -238,3 +276,71 @@ const movementsDescriptions = movements.map(
 );
 
 console.log(movementsDescriptions);
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const deposits = movements.filter(function (mov) {
+  return mov > 0;
+});
+console.log(movements);
+console.log(deposits);
+
+const withdrawls = movements.filter(function (mov) {
+  return mov < 0;
+});
+
+console.log(withdrawls);
+
+
+// REDUCE
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+console.log(movements);
+
+//different arguements in reduce.  Accumlator is the "snowball"
+const balance = movements.reduce(function (accumulator, current, index, array) {
+  console.log(`itteration ${index}: ${accumulator}`);
+  return accumulator + current;
+}, 0); //this part specifies where we start counting)
+
+const balance2 = movements.reduce((acc, cur) => acc + cur, 0);
+console.log(balance2);
+
+console.log(balance);
+
+// Maximum value
+
+const max = movements.reduce(
+  (acc, cur) => (acc > cur ? acc : cur),
+  movements[0]
+);
+console.log(max);
+
+const dogAges1 = [5, 2, 4, 1, 15, 8, 3];
+
+const calcAverageHumanAge = function (ages) {
+  const dogsHumanYears = ages.map(function (dogAge) {
+    // This could have been a terninary operator, though I don't think that is as pretty
+    if (dogAge > 2) {
+      return 16 + dogAge * 4;
+    } else {
+      return 2 * dogAge;
+    }
+  });
+  const dogsHumanYearsFiltered = dogsHumanYears.filter(age => age >= 18);
+  const averageHumanAge =
+    dogsHumanYearsFiltered.reduce((acc, age) => acc + age, 0) /
+    dogsHumanYearsFiltered.length;
+  console.log(averageHumanAge);
+};
+
+calcAverageHumanAge(dogAges1);
+
+
+// PIPELINE
+const totalDepostitsUSD = movements
+  .filter(mov => mov > 0)
+  .map(mov => mov * 1.1)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(totalDepostitsUSD);
+*/
