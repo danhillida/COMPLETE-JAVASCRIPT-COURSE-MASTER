@@ -79,34 +79,33 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-displayMovements(account1.movements);
 
-const calcDisplaySummary = function (movements) {
-  const incomes = movements
+const calcDisplaySummary = function (acc) {
+  const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov);
-  labelSumIn.textContent = `${incomes} €`;
+  labelSumIn.textContent = `${incomes}€`;
 
-  const out = movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov);
-  labelSumOut.textContent = `${Math.abs(out)} €`;
+  const out = acc.movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov);
+  labelSumOut.textContent = `${Math.abs(out)}€`;
 
   const interest = movements
     .filter(mov => mov > 0)
-    .map(deposit => (deposit * 1.2) / 100)
+    .map(deposit => (deposit * acc.interestRate) / 100)
     .filter((int, i, arr) => {
-      console.log(arr);
+      // console.log(arr);
       return int >= 1;
     })
     .reduce((acc, int) => acc + int);
-  labelSumInterest.textContent = `${interest} €`;
+  labelSumInterest.textContent = `${interest}€`;
 };
-calcDisplaySummary(account1.movements);
 
 const calcDisplayBalance = function (movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} EUR`;
+  labelBalance.textContent = `${balance}€`;
 };
-calcDisplayBalance(account1.movements);
 
 const createUsernames = function (accs) {
   accs.forEach(function (acc) {
@@ -117,8 +116,41 @@ const createUsernames = function (accs) {
       .join('');
   });
 };
+createUsernames(accounts);
+
 const user = 'Steven Thomas Williams'; //stw
 
+// Event Handler
+let currentAccount;
+
+btnLogin.addEventListener('click', function (e) {
+  // Prevent from form submitting
+  e.preventDefault();
+
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+  console.log(currentAccount);
+
+  //This is a great usecase for optional chaining with the "?"
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // Display UI and message
+    labelWelcome.textContent = `Welcom back, ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    //Clear fields
+    inputLoginUsername.value = inputLoginPin.value = '';
+    containerApp.style.opacity = 100;
+    inputLoginPin.blur();
+    // Display movements
+    displayMovements(currentAccount.movements);
+
+    // Display balance
+    calcDisplayBalance(currentAccount.movements);
+    // Display summary
+    calcDisplaySummary(currentAccount);
+  }
+});
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -336,11 +368,40 @@ const calcAverageHumanAge = function (ages) {
 
 calcAverageHumanAge(dogAges1);
 
-
 // PIPELINE
 const totalDepostitsUSD = movements
   .filter(mov => mov > 0)
   .map(mov => mov * 1.1)
   .reduce((acc, mov) => acc + mov, 0);
 console.log(totalDepostitsUSD);
+
+//------- Challege 2----------
+
+const calcAverageHumanAge2 = ages =>
+  ages
+    .map(age => (age > 2 ? age * 4 + 16 : age * 2))
+    .filter(age => age >= 18)
+    .reduce((acc, age, i, arr) => acc + age / arr.length, 0);
+
+console.log(calcAverageHumanAge2(dogAges1));
+
+
+// FIND method -- Will not return an array, just the first element that is true
+const firstWithdrawal = movements.find(mov => mov < 0);
+console.log(firstWithdrawal);
+
+console.log(accounts);
+
+const account = accounts.find(acc => acc.owner === 'Jessica Davis');
+console.log(account);
+
+let acnt;
+for (const acc of accounts) {
+  if (acc.owner === 'Jessica Davis') {
+    acnt = acc;
+    break;
+  }
+}
+
+console.log(acnt);
 */
