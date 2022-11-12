@@ -151,6 +151,17 @@ btnLogin.addEventListener('click', function (e) {
     calcDisplaySummary(currentAccount);
   }
 });
+
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const recieverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  console.log(amount, recieverAcc);
+
+  if(amount > 0 && )
+});
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
