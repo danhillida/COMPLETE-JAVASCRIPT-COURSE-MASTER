@@ -102,9 +102,10 @@ const calcDisplaySummary = function (acc) {
   labelSumInterest.textContent = `${interest}€`;
 };
 
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance}€`;
+const calcDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+
+  labelBalance.textContent = `${acc.balance}€`;
 };
 
 const createUsernames = function (accs) {
@@ -118,11 +119,22 @@ const createUsernames = function (accs) {
 };
 createUsernames(accounts);
 
+const updateUI = function (acc) {
+  //displayMovements
+  displayMovements(acc.movements);
+
+  // Display balance
+  calcDisplayBalance(acc);
+  // Display summary
+  calcDisplaySummary(acc);
+};
+
 const user = 'Steven Thomas Williams'; //stw
 
 // Event Handler
 let currentAccount;
 
+// Login
 btnLogin.addEventListener('click', function (e) {
   // Prevent from form submitting
   e.preventDefault();
@@ -135,7 +147,7 @@ btnLogin.addEventListener('click', function (e) {
   //This is a great usecase for optional chaining with the "?"
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
     // Display UI and message
-    labelWelcome.textContent = `Welcom back, ${
+    labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
     }`;
     //Clear fields
@@ -143,12 +155,7 @@ btnLogin.addEventListener('click', function (e) {
     containerApp.style.opacity = 100;
     inputLoginPin.blur();
     // Display movements
-    displayMovements(currentAccount.movements);
-
-    // Display balance
-    calcDisplayBalance(currentAccount.movements);
-    // Display summary
-    calcDisplaySummary(currentAccount);
+    updateUI(currentAccount);
   }
 });
 
@@ -158,9 +165,56 @@ btnTransfer.addEventListener('click', function (e) {
   const recieverAcc = accounts.find(
     acc => acc.username === inputTransferTo.value
   );
-  console.log(amount, recieverAcc);
+  // Below both inputs are set to the empty string
+  inputTransferAmount.value = inputTransferTo.value = '';
+  if (
+    amount > 0 &&
+    currentAccount.balance >= amount &&
+    recieverAcc &&
+    recieverAcc?.username !== currentAccount.username
+  ) {
+    currentAccount.movements.push(-amount);
+    recieverAcc.movements.push(amount);
+    updateUI(currentAccount);
+  }
+});
 
-  if(amount > 0 && )
+// ONly grants a loan if there is a deposit 10% of loan amount
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const amount = Number(inputLoanAmount.value);
+
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1));
+  {
+    // Add movement
+    currentAccount.movements.push(amount);
+
+    // Update UI
+    updateUI(currentAccount);
+  }
+  inputLoanAmount.value = '';
+});
+
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  if (
+    inputCloseUsername.value === currentAccount?.username &&
+    Number(inputClosePin.value) === currentAccount?.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+
+    // delete account
+    accounts.splice(index, 1);
+
+    // Hide UI
+    containerApp.style.opacity = 0;
+  }
+  inputCloseUsername.value = inputClosePin.value = '';
+  labelWelcome.textContent = 'Log in to get started';
 });
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -415,4 +469,55 @@ for (const acc of accounts) {
 }
 
 console.log(acnt);
+
+
+// INCLUDES method -- Checks only for equality
+console.log(movements);
+console.log(movements.includes(-130));
+
+// SOME method
+
+// some requires a statement that returns true or false -- checks for condition
+console.log(movements.some(mov => mov === -130));
+
+const anyDeposits = movements.some(mov => mov > 1500);
+console.log(anyDeposits);
+
+
+// EVERY method -- only returns true if every value passes
+
+console.log(movements.every(mov => mov > 0));
+
+// Seperate callback -- Good for the DRY principle
+
+const deposit = mov => mov > 0;
+console.log(account4.movements.every(deposit));
 */
+
+// FLAT MAP -- combines arrays w/o callback function
+const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
+console.log(arr.flat());
+
+// flat only goes one level deep -- can call how deep you want to go
+const arrDeep = [[[1, 2], 3], [4, [5, 6]], 7, 8];
+console.log(arrDeep.flat(2));
+
+// const accountMovements = accounts.map(acc => acc.movements);
+// console.log(accountMovements);
+// const allMovements = accountMovements.flat();
+// console.log(allMovements);
+// const overallBallance = allMovements.reduce((acc, mov) => acc + mov, 0);
+// console.log(overallBallance);
+
+const overallBallance = accounts
+  .map(acc => acc.movements)
+  .flat()
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(overallBallance);
+
+// FLAT MAP -- Map and then flat is very common.  Better performance
+// flatmap only goes one level deep can cannot be changed
+const overallBallance2 = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(overallBallance2);
