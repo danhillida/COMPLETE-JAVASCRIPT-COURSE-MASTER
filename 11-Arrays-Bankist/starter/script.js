@@ -714,3 +714,30 @@ console.log(`${ownersEatTooMuch.join(' and ')}'s dogs eat too much!'`);
 console.log(`${ownersEatTooLittle.join(' and ')}'s dogs eat too little!'`);
 
 console.log(dogs.some(dog => dog.curFood === dog.recommendedFood));
+
+console.log(
+  dogs.some(
+    dog =>
+      dog.curFood === dog.recommendedFood * 0.9 || dog.recommendedFood * 1.1
+  )
+);
+
+const dogsEatOkay = dogs.filter(
+  dog =>
+    dog.curFood >= dog.recommendedFood * 0.9 ||
+    dog.curFood <= dog.recommendedFood * 1.1
+);
+
+console.log(
+  dogs.some(
+    dog => dog.curFood > dog.recFood * 0.9 && dog.curFood < dog.recFood * 1.1
+  )
+);
+console.log(dogsEatOkay);
+// Being within a range of 10% above and below the rec portion is okay 0.9 and 1.1
+
+const dogssorted = dogs
+  .slice()
+  .sort((a, b) => a.recommendedFood - b.recommendedFood);
+
+console.log(dogssorted);
