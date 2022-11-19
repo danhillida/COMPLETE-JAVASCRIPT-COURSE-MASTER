@@ -182,7 +182,7 @@ btnLogin.addEventListener('click', function (e) {
 
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
-  const amount = Number(inputTransferAmount.value);
+  const amount = +inputTransferAmount.value;
   const receiverAcc = accounts.find(
     acc => acc.username === inputTransferTo.value
   );
@@ -206,7 +206,7 @@ btnTransfer.addEventListener('click', function (e) {
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
-  const amount = Number(inputLoanAmount.value);
+  const amount = +inputLoanAmount.value;
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
@@ -223,7 +223,7 @@ btnClose.addEventListener('click', function (e) {
 
   if (
     inputCloseUsername.value === currentAccount.username &&
-    Number(inputClosePin.value) === currentAccount.pin
+    +inputClosePin.value === currentAccount.pin
   ) {
     const index = accounts.findIndex(
       acc => acc.username === currentAccount.username
@@ -251,5 +251,43 @@ btnSort.addEventListener('click', function (e) {
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
-
+/*
 console.log(23 === 23.0);
+
+// Base 10 - 0 to 9;
+//Binary base 2 - 0 to 1
+console.log(0.1 + 0.2); //Issue with base 2 system
+console.log(0.1 + 0.2 === 0.3);
+
+console.log(Number('23'));
+console.log(+'23'); // Cheater way to force string to number
+
+// Parsing
+console.log(Number.parseInt('30 years old', 10)); //Always pass in 10 to avoid bugs.  Its your base amount
+
+console.log(Number.parseFloat('2.5 rem'));
+console.log(Number.parseInt('2.5')); //You don't have to call number, but its good practice
+
+console.log(Number.isNaN(20));
+console.log(Number.isNaN(20));
+console.log(Number.isNaN(+'20X'));
+console.log(Number.isNaN(23 / 0));
+console.log('--------------------------');
+
+// Number.isFinite is the best way for checking if a value is a number
+console.log(Number.isFinite(20));
+console.log(Number.isFinite('20'));
+
+console.log(Number.isInteger(23));
+console.log(Number.isInteger(23.0));
+console.log(Number.isInteger(23 / 0));
+*/
+
+console.log(Math.sqrt(25));
+console.log(25 ** (1 / 2));
+
+console.log(Math.max(5, 18, 23, 11, 2));
+console.log(Math.min(5, 18, 23, 11, 2));
+console.log(Math.max(5, 18, '23', 11, 2));
+
+console.log(Math.PI * Number.parseFloat('10px') ** 2);
