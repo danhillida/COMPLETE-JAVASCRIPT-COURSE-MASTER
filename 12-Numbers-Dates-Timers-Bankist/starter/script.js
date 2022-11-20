@@ -94,7 +94,7 @@ const displayMovements = function (movements, sort = false) {
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-        <div class="movements__value">${mov}€</div>
+        <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
 
@@ -104,19 +104,19 @@ const displayMovements = function (movements, sort = false) {
 
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance}€`;
+  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
 };
 
 const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes}€`;
+  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
 
   const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out)}€`;
+  labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -126,7 +126,7 @@ const calcDisplaySummary = function (acc) {
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest}€`;
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 };
 
 const createUsernames = function (accs) {
@@ -206,7 +206,7 @@ btnTransfer.addEventListener('click', function (e) {
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
-  const amount = +inputLoanAmount.value;
+  const amount = Math.floor(inputLoanAmount.value); //Using floor to round any number down
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
@@ -281,7 +281,7 @@ console.log(Number.isFinite('20'));
 console.log(Number.isInteger(23));
 console.log(Number.isInteger(23.0));
 console.log(Number.isInteger(23 / 0));
-*/
+
 
 console.log(Math.sqrt(25));
 console.log(25 ** (1 / 2));
@@ -291,3 +291,50 @@ console.log(Math.min(5, 18, 23, 11, 2));
 console.log(Math.max(5, 18, '23', 11, 2));
 
 console.log(Math.PI * Number.parseFloat('10px') ** 2);
+
+console.log(Math.trunc(Math.random() * 6) + 1);
+
+const randomInt = (min, max) =>
+  Math.floor(Math.random() * (max - min) + 1) + min;
+
+console.log(randomInt(10, 20));
+
+// Rounding intergers
+console.log(Math.round(23.3));
+console.log(Math.round(23.7));
+
+console.log(Math.ceil(23.3));
+console.log(Math.ceil(23.7));
+
+console.log(Math.floor(23.4));
+console.log(Math.floor('23.7'));
+
+console.log(Math.trunc(-23.3));
+console.log(Math.floor(-23.7));
+
+// Rounding Decimals
+console.log((2.7).toFixed(0)); //Returns a string
+console.log(+(2.7).toFixed(3)); //Use plus sign to concat string to number
+*/
+
+console.log(5 % 2);
+console.log(5 / 2);
+console.log(8 % 3);
+console.log(8 / 3);
+
+console.log(6 % 2);
+console.log(7 % 2);
+
+const isEven = n => n % 2 === 0;
+
+console.log(isEven(8));
+console.log(isEven(9));
+console.log(isEven(10));
+console.log(isEven(11));
+
+labelBalance.addEventListener('click', function () {
+  [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
+    if (i % 2 === 0) row.style.backgroundColor = 'orangered';
+    if (i % 3 === 0) row.style.backgroundColor = 'blue';
+  });
+});
