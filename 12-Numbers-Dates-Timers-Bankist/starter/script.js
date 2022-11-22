@@ -315,7 +315,7 @@ console.log(Math.floor(-23.7));
 // Rounding Decimals
 console.log((2.7).toFixed(0)); //Returns a string
 console.log(+(2.7).toFixed(3)); //Use plus sign to concat string to number
-*/
+
 
 console.log(5 % 2);
 console.log(5 / 2);
@@ -338,3 +338,21 @@ labelBalance.addEventListener('click', function () {
     if (i % 3 === 0) row.style.backgroundColor = 'blue';
   });
 });
+
+
+// Numeric Seperator
+// Use when hard coding numbers
+const diameter = 287_460_000_000;
+console.log(diameter);
+
+const price = 345_99;
+console.log(price);
+
+const transferFee = 15_00;
+const transferFee2 = 1_500;
+
+const PI = 3.1415;
+console.log(PI);
+
+console.log(parseInt('23_000'));
+*/
