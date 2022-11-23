@@ -356,3 +356,24 @@ console.log(PI);
 
 console.log(parseInt('23_000'));
 */
+console.log(2 ** 53 - 1);
+console.log(Number.MAX_SAFE_INTEGER);
+console.log(2 ** 53 + 4);
+
+// BigINT
+console.log(123498723498571309812349871234897n);
+console.log(BigInt(123409871324098561873));
+
+//Operations
+console.log(10000n + 10000n);
+console.log(1234567890n * 1234355667n);
+// cannot mix big ints with other types
+
+console.log(20n > 15);
+console.log(20n === 20); // no type conversion
+console.log(20n == 20);
+console.log(typeof 20n);
+
+// Divisions
+console.log(10n / 3n); // Will drop the decimal
+console.log(5n / 2n);
